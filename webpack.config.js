@@ -1,10 +1,13 @@
 const path = require('path');
+const htmlWebpackPlugin=require("html-webpack-plugin")
 
 module.exports = {
     mode: 'development',
     devtool: 'source-map',
     // JS 执行入口文件
-    entry: 'src/main.js',
+    entry: {
+        main:'src/main.js'
+    },
     output: {
         // 把所有依赖的模块合并输出到一个 bundle.js 文件
         filename: 'bundle.js',
@@ -55,6 +58,8 @@ module.exports = {
         enforceModuleExtension:false//兼容  第三方模块中大多数导入语句没带文件后缀
     },
     Plugin:[
-
+        new htmlWebpackPlugin({
+            filename:{main}
+        })
     ]
 };
