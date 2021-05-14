@@ -59,7 +59,9 @@ module.exports = {
     },
     Plugin:[
         new htmlWebpackPlugin({
-            filename:{main}
+            filename:'index.html',
+            templateL:'index.html',
+            chunks:[]
         })
     ]
 };
