@@ -6,7 +6,7 @@ module.exports = {
     devtool: 'source-map',
     // JS 执行入口文件
     entry: {
-        main:'src/main.js' 
+        main:'./main.js' 
     },
     output: {
         // 把所有依赖的模块合并输出到一个 bundle.js 文件
@@ -16,9 +16,9 @@ module.exports = {
     },
     module: {
         rules: [{
-                test: '/\.js$/',
+                test:['/\.js$/'],
                 use: {
-                    loader: ['babel-loader'],
+                    loader: 'babel-loader',
                     cacheDirectory: true,
                 },
                 //至，命中src里面的文件
@@ -54,14 +54,14 @@ module.exports = {
         modules:['node_modules'],
         //也就是说当遇到 require('./data') 这样的导入语句时，Webpack 会先去寻找 ./data.js 文件，如果该文件不存在就去寻找 ./data.json 文件， 如果还是找不到就报错。
         extensions: ['.js', '.json'],
-        enforceExtension:true,//必须带文件类型
-        enforceModuleExtension:false//兼容  第三方模块中大多数导入语句没带文件后缀
+        // enforceExtension:true,//必须带文件类型
+        // enforceModuleExtension:false//兼容  第三方模块中大多数导入语句没带文件后缀
     },
-    Plugin:[
-        new htmlWebpackPlugin({
-            filename:'index.html',
-            templateL:'index.html',
-            chunks:[]
-        })
-    ]
+    // Plugin:[
+    //     new htmlWebpackPlugin({
+    //         filename:'index.html',
+    //         templateL:'index.html',
+    //         chunks:[]
+    //     })
+    // ]
 };
