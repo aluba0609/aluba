@@ -1,9 +1,10 @@
 const path = require('path');
 const htmlWebpackPlugin=require("html-webpack-plugin")
-
+const env = process.env.NODE_ENV
+console.log(env,"env")
 module.exports = {
-    mode: 'development',
-    devtool: 'source-map',
+    // mode: 'development',
+    devtool: env=='development'?false:'source-map',
     // JS 执行入口文件
     entry: {
         main:'./main.js' 
@@ -15,34 +16,34 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
     },
     module: {
-        // rules: [{
-        //         test:['/\.js$/'],
-        //         use: {
-        //             loader: 'babel-loader',
-        //             cacheDirectory: true,
-        //         },
-        //         //至，命中src里面的文件
-        //         include: [path.resolve(__dirname, 'src')],
-        //         // enforce:'post' 的含义是把该 Loader 的执行顺序放到最后
-        //         // enforce 的值还可以是 pre，代表把 Loader 的执行顺序放到最前面
-        //         enforce: 'post',
-        //         noparse:()=>{
-        //             return ['jquery','chartjs']
-        //         }
-        //     },
-        //     {
-        //         test: ['/\.css$/', '/\.scss$/'],
-        //         // 处理顺序为从后到前，即先交给 sass-loader 处理，再把结果交给 css-loader 最后再给 style-loader。
-        //         loader: ['style-loader', 'sass-loader', 'css-loader'],
-        //         // 排除 node_modules 目录下的文件
-        //         enclude: [path.resolve(__dirname, 'node_modules')]
-        //     },
-        //     {
-        //         // 对非文本文件采用 file-loader 加载
-        //         test: /\.(gif|png|jpe?g|eot|woff|ttf|svg|pdf)$/,
-        //         use: ['file-loader'],
-        //     },
-        // ]
+        rules: [{
+                test:['/\.js$/'],
+                loader: 'babel-loader',
+                options:{
+                    cacheDirectory: false,
+                },
+                //至，命中src里面的文件
+                include: [path.resolve(__dirname, 'src')],
+                // enforce:'post' 的含义是把该 Loader 的执行顺序放到最后
+                // enforce 的值还可以是 pre，代表把 Loader 的执行顺序放到最前面
+                enforce: 'post',
+                // noparse:()=>{
+                //     return ['jquery','chartjs']
+                // }
+            },
+            // {
+            //     test: ['/\.css$/', '/\.scss$/'],
+            //     // 处理顺序为从后到前，即先交给 sass-loader 处理，再把结果交给 css-loader 最后再给 style-loader。
+            //     loader: ['style-loader', 'sass-loader', 'css-loader'],
+            //     // 排除 node_modules 目录下的文件
+            //     enclude: [path.resolve(__dirname, 'node_modules')]
+            // },
+            // {
+            //     // 对非文本文件采用 file-loader 加载
+            //     test: /\.(gif|png|jpe?g|eot|woff|ttf|svg|pdf)$/,
+            //     use: ['file-loader'],
+            // },
+        ]
     },
     resolve:{
         //resolve.modules 配置 Webpack 去哪些目录下寻找第三方模块，
