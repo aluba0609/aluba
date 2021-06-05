@@ -20,6 +20,7 @@
     "css-loader": "^5.2.6",
     "eslint": "^7.28.0",
     "eslint-loader": "^4.0.2",
+    "expose-loader": "^3.0.0",
     "html-webpack-plugin": "^4.5.2",
     "less-loader": "^9.0.0",
     "mini-css-extract-plugin": "^1.6.0",

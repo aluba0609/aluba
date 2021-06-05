@@ -2,6 +2,7 @@ let path=require('path');
 let HtmlWebpackPlugin=require('html-webpack-plugin');
 let MiniCssExtractPlugin=require('mini-css-extract-plugin');
 let {CleanWebpackPlugin} = require('clean-webpack-plugin');
+let webpack=require('webpack')
 module.exports={
     devServer:{
         progress:true,
@@ -28,19 +29,22 @@ module.exports={
         }),
         new MiniCssExtractPlugin({
             filename:'main.[hash].css'
+        }),
+        new webpack.ProvidePlugin({//为每个模块提供jquery
+            '$':'jquery'
         })
     ],
     module:{
         rules:[//默认 loader 从右到左 从下到上
-            {
-                test:/\.js$/,
-                use:{
-                    loader:'eslint-loader',
-                    options:{
-                        enforce:'pre'//强制在最先执行  或者 post 在普通loader后面执行
-                    }
-                }
-            },
+            // {
+            //     test:/\.js$/,
+            //     use:{
+            //         loader:'eslint-loader',
+            //         options:{
+            //             enforce:'pre'//强制在最先执行  或者 post 在普通loader后面执行
+            //         }
+            //     }
+            // },
             {
                 test:/\.js&/,//normal 普通的loader
                 use:{
@@ -85,6 +89,16 @@ module.exports={
                         'less-loader'//负责less转换成css
                     ]
             }, 
+            // {
+            //     test:require.resolve('jquery'),
+            //     loader:'expose-loader',
+            //     options:{
+            //         exposes:["$","jquery"]
+            //     }
+            // },
         ]
+    },
+    externals:{//阻止import $ from "jquery"
+        jquery:'$'
     }
 }
