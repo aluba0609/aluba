@@ -50,8 +50,8 @@ module.exports={
                             '@babel/preset-env'
                         ],
                         plugins: [
-                            // "@babel/plugin-proposal-class-properties",//处理class语言
-                            // "@babel/plugin-transform-runtime"//处理promise gen
+                            "@babel/plugin-proposal-class-properties",//处理class语言
+                            "@babel/plugin-transform-runtime"//处理promise gen
                         ]
                     }
                     
