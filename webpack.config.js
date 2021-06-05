@@ -2,7 +2,8 @@ let path=require('path');
 let HtmlWebpackPlugin=require('html-webpack-plugin');
 let MiniCssExtractPlugin=require('mini-css-extract-plugin');
 let {CleanWebpackPlugin} = require('clean-webpack-plugin');
-let webpack=require('webpack')
+let webpack=require('webpack');
+const { loader } = require('mini-css-extract-plugin');
 module.exports={
     devServer:{
         progress:true,
@@ -89,16 +90,27 @@ module.exports={
                         'less-loader'//负责less转换成css
                     ]
             }, 
-            // {
-            //     test:require.resolve('jquery'),
-            //     loader:'expose-loader',
-            //     options:{
-            //         exposes:["$","jquery"]
-            //     }
-            // },
+            {
+                test:/\.(png|jpg|gif)$/,
+                use:[
+                        {
+                            loader:'url-loader',
+                            options:{//当我们的图片 小于多少K的时候 用base 64 来转化 否则用file-loader产生真实图片
+                                limit:20*1024
+                            }
+                        },
+                        // {
+                        //     loader:'file-loader',
+                        // }
+                ]
+            },
+            {
+                test:/\.html$/,//能够把html写死的img  URL  更换成打包后的url
+                loader:'html-withimg-loader'
+            }
         ]
     },
-    externals:{//阻止import $ from "jquery"
-        jquery:'$'
-    }
+    // externals:{//阻止import $ from "jquery"
+    //     jquery:'$'
+    // }
 }
