@@ -3,21 +3,44 @@ let HtmlWebpackPlugin=require('html-webpack-plugin');
 let MiniCssExtractPlugin=require('mini-css-extract-plugin');
 let {CleanWebpackPlugin} = require('clean-webpack-plugin');
 let webpack=require('webpack');
-const { loader } = require('mini-css-extract-plugin');
+let OptimizeCss=require('optimize-css-assets-webpack-plugin')
+let UglifyjsPlugin=require('uglifyjs-webpack-plugin')
+
 module.exports={
+    optimization:{
+        minimizer:[
+            new UglifyjsPlugin({
+                cache:true,
+                parallel:true,//并发压缩多个文件
+                sourceMap:true
+            }),
+            new OptimizeCss()
+        ]
+    },
     devServer:{
         progress:true,
         port:3000,
         contentBase:'./dist',
-        compress:true
+        compress:true,
+        open:true,
+        filename:"index.html"
     },
     mode:"development",
-    entry:'./src/index.js',
+    entry:{
+        index:'./src/index.js'
+    },
     output:{
-        filename:"bundle.[hash].js",
+        filename:"[name].[hash].js",
         path:path.resolve(__dirname,'dist')
     },
     plugins:[
+
+        //需要提前压缩好文件
+        new webpack.DllReferencePlugin({
+            context:__dirname,
+            manifest: require('./dist/dll/mainfest.json'),
+            extensions:['.json']
+        }),
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
             template:'./src/index.html',
@@ -29,13 +52,14 @@ module.exports={
             hash:true,//js会加上hash
         }),
         new MiniCssExtractPlugin({
-            filename:'main.[hash].css'
+            filename:'[name].[hash].css'
         }),
         new webpack.ProvidePlugin({//为每个模块提供jquery
             '$':'jquery'
         })
     ],
     module:{
+        noParse:/jquery/,//不去解析jQuery中的依赖库，前提需要知道该库没有依赖其他库
         rules:[//默认 loader 从右到左 从下到上
             // {
             //     test:/\.js$/,
@@ -56,7 +80,8 @@ module.exports={
                         ],
                         plugins: [
                             "@babel/plugin-proposal-class-properties",//处理class语言
-                            "@babel/plugin-transform-runtime"//处理promise gen
+                            "@babel/plugin-transform-runtime",//处理promise gen
+                            "@babel/preset-react",//处理react语法
                         ]
                     }
                     
@@ -110,7 +135,22 @@ module.exports={
             }
         ]
     },
-    // externals:{//阻止import $ from "jquery"
+    watch:true,
+    watchOptions:{
+        poll:1000,//每秒询问次数
+        aggregateTimeout:500,//防抖，停止更改后500秒内触发打包
+        ignored:/node_modules/,//忽略监控文件
+    },
+    resolve:{
+        modules:[path.resolve(__dirname,'node_modules')],
+        alias:{//别名 
+
+        },
+        mainFields:['style','main'],//json文件里面的入口文件
+        mainFiles:['index.js'],//入口文件的名字
+        extensions:['.js','.css','.json','.vue']
+    }
+    // externals:{//阻止import $ from "jquery"的打包
     //     jquery:'$'
     // }
 }
