@@ -20,7 +20,7 @@ module.exports={
     devServer:{
         progress:true,
         port:3000,
-        contentBase:'./dist',
+        contentBase:'./',
         compress:true,
         open:true,
         filename:"index.html"
@@ -38,7 +38,7 @@ module.exports={
         //需要提前压缩好文件
         new webpack.DllReferencePlugin({
             context:__dirname,
-            manifest: require('./dist/dll/mainfest.json'),
+            manifest: require('./dll/mainfest.json'),
             extensions:['.json']
         }),
         new CleanWebpackPlugin(),
