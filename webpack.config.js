@@ -18,11 +18,12 @@ module.exports={
         ]
     },
     devServer:{
+        hot:true,
         progress:true,
         port:3000,
         contentBase:'./',
         compress:true,
-        open:true,
+        open:false,
         filename:"index.html"
     },
     mode:"development",
